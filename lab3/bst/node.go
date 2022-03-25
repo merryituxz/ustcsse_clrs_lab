@@ -1,14 +1,12 @@
 package bst
 
-type node struct {
-	key                 int
-	left, right, parent *node
+type Node struct {
+	Key                 int
+	Left, Right, Parent *Node
 }
+
+var NilNode = &Node{}
 
 type BST struct {
-	root *node
-}
-
-func NilNode() *node {
-	return &node{}
+	root *Node
 }

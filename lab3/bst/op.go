@@ -1,82 +1,110 @@
 package bst
 
+//NewBST 返回一个空的BST
 func NewBST() *BST {
-	bst := &BST{root: &node{
-		key:   0,
-		left:  nil,
-		right: nil,
-	}}
+	bst := &BST{root: nil}
 	return bst
 }
 
 //TreeSearch 从x开始查找k
-func TreeSearch(x *node, k int) *node {
-	if x == nil || k == x.key {
+func TreeSearch(x *Node, k int) *Node {
+	if x == nil || k == x.Key {
 		return x
 	}
-	if k < x.key {
-		return TreeSearch(x.left, k)
+	if k < x.Key {
+		return TreeSearch(x.Left, k)
 	} else {
-		return TreeSearch(x.right, k)
+		return TreeSearch(x.Right, k)
 	}
 }
 
 //TreeMinimum 查找BST中最小值的结点
-func TreeMinimum(x *node) *node {
-	for x.left != nil {
-		x = x.left
+func TreeMinimum(x *Node) *Node {
+	for x.Left != nil {
+		x = x.Left
 	}
 	return x
 }
 
 //TreeMaximum 查找BST中最大值的结点
-func TreeMaximum(x *node) *node {
-	for x.right != nil {
-		x = x.right
+func TreeMaximum(x *Node) *Node {
+	for x.Right != nil {
+		x = x.Right
 	}
 	return x
 }
 
-func TreeInsert(t *BST, z *node) {
-	y := &node{}
+//TreeInsert 向BST中插入结点z
+func TreeInsert(t *BST, z *Node) {
+	var y *Node = nil
 	x := t.root
 	for x != nil {
 		y = x
-		if z.key < x.key {
-			x = x.left
+		if z.Key < x.Key {
+			x = x.Left
 		} else {
-			x = x.right
+			x = x.Right
 		}
 	}
-	z.parent = y
+	z.Parent = y
 	if y == nil {
 		t.root = z
-	} else if z.key < y.key {
-		y.left = z
+	} else if z.Key < y.Key {
+		y.Left = z
 	} else {
-		y.right = z
+		y.Right = z
 	}
 }
 
-func Transplant(t *BST, u, v *node) {
-	if u.parent == NilNode() {
+func Transplant(t *BST, u, v *Node) {
+	if u.Parent == nil {
 		t.root = v
-	} else if u == u.parent.left {
-		u.parent.left = v
+	} else if u == u.Parent.Left {
+		u.Parent.Left = v
 	} else {
-		u.parent.right = v
+		u.Parent.Right = v
 	}
-	if v != NilNode() {
-		v.parent = u.parent
+	if v != nil {
+		v.Parent = u.Parent
 	}
 }
 
-func TreeDelete(t *BST, z *node) {
-	if z.left == NilNode() {
-		Transplant(t, z, z.right)
-	} else if z.right == NilNode() {
-		Transplant(t, z, z.left)
+//TreeDelete 从BST中删除结点z
+func TreeDelete(t *BST, z *Node) {
+	if z.Left == nil {
+		Transplant(t, z, z.Right)
+	} else if z.Right == nil {
+		Transplant(t, z, z.Left)
 	} else {
-
+		y := TreeMinimum(z.Right)
+		if y.Parent != z {
+			Transplant(t, y, y.Right)
+			y.Right = z.Right
+			y.Right.Parent = y
+		}
+		Transplant(t, z, y)
+		y.Left = z.Left
+		y.Left.Parent = y
 	}
+}
+
+//IsValidBST 判断BST是否合法
+func IsValidBST(t *BST) ([]int, bool) {
+	var inorder func(r *Node)
+	var inorderSeq []int
+	inorder = func(r *Node) {
+		if r == nil {
+			return
+		}
+		inorder(r.Left)
+		inorderSeq = append(inorderSeq, r.Key)
+		inorder(r.Right)
+	}
+	inorder(t.root)
+	for i := 1; i < len(inorderSeq); i++ {
+		if inorderSeq[i] < inorderSeq[i-1] {
+			return inorderSeq, false
+		}
+	}
+	return inorderSeq, true
 }
