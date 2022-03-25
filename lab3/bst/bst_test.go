@@ -8,7 +8,7 @@ import (
 var bst *BST = NewBST()
 
 func TestInitBST(t *testing.T) {
-	fmt.Println(*bst.root)
+	fmt.Println((*bst).root)
 }
 
 func TestTreeInsert(t *testing.T) {
