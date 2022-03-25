@@ -169,7 +169,7 @@ func RBDelete(t *RBTree, z *Node) {
 		y.Color = z.Color
 	}
 	if yOriginColor == BLACK {
-		RBDeleteFixup(t, z)
+		RBDeleteFixup(t, x)
 	}
 }
 
@@ -191,13 +191,12 @@ func RBDeleteFixup(t *RBTree, x *Node) {
 				w.Color = RED
 				RightRotate(t, w)
 				w = x.Parent.Right
-			} else {
-				w.Color = x.Parent.Color
-				x.Parent.Color = BLACK
-				w.Right.Color = BLACK
-				LeftRotate(t, x.Parent)
-				x = t.root
 			}
+			w.Color = x.Parent.Color
+			x.Parent.Color = BLACK
+			w.Right.Color = BLACK
+			LeftRotate(t, x.Parent)
+			x = t.root
 		} else if x == x.Parent.Right {
 			w := x.Parent.Left
 			if w.Color == RED {
@@ -214,13 +213,12 @@ func RBDeleteFixup(t *RBTree, x *Node) {
 				w.Color = RED
 				LeftRotate(t, w)
 				w = x.Parent.Left
-			} else {
-				w.Color = x.Parent.Color
-				x.Parent.Color = BLACK
-				w.Left.Color = BLACK
-				RightRotate(t, x.Parent)
-				x = t.root
 			}
+			w.Color = x.Parent.Color
+			x.Parent.Color = BLACK
+			w.Left.Color = BLACK
+			RightRotate(t, x.Parent)
+			x = t.root
 		}
 	}
 	x.Color = BLACK

@@ -22,5 +22,5 @@ func main() {
 			f[j] = max(f[j], f[j-v[i]]+w[i])
 		}
 	}
-	fmt.Println(f[c-1])
+	fmt.Println(f[c])
 }
