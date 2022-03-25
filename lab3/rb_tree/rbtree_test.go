@@ -50,7 +50,7 @@ func TestRBDelete(t *testing.T) {
 
 	RBDelete(rbTree, TreeSearch(rbTree.root, 14))
 	RBDelete(rbTree, TreeSearch(rbTree.root, 9))
-	//RBDelete(rbTree, TreeSearch(rbTree.root, 5))
+	RBDelete(rbTree, TreeSearch(rbTree.root, 5))
 
 	inorderSeq := InorderTraverse(rbTree)
 
